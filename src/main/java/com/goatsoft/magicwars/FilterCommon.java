@@ -21,6 +21,8 @@ public class FilterCommon
       {
          boolean hasThaum = false;
          boolean hasBlood = false;
+         boolean hasWitch = false;
+         boolean hasTinker = false;
          try
          {
             NBTTagCompound mwData = (NBTTagCompound) player.getEntityData().getTag("MagicWars");
@@ -28,10 +30,14 @@ public class FilterCommon
             {
                hasThaum = mwData.getBoolean("Thaumcraft");
                hasBlood = mwData.getBoolean("BloodMagic");
+               hasWitch = mwData.getBoolean("Witchery");
+               hasTinker = mwData.getBoolean("TConstruct");
             }
          }
          catch(ClassCastException ex)
          {
+            // wrong data type, will be replaced when something is changed
+            // assume everything false for now
          }
 
          // get class name of item, or underlying block for item
@@ -41,7 +47,7 @@ public class FilterCommon
             className = ((ItemBlock) result.getItem()).field_150939_a.getClass().getName();
          }
 
-         System.out.println("*** RESULT CLASS " + className);
+         System.out.println("*** FILTER RESULT CLASS " + className);
 
          // filter out item recipes from classes the player doesn't have
          if(className.startsWith("thaumcraft.") && (!hasThaum))
@@ -59,6 +65,26 @@ public class FilterCommon
             if(!player.worldObj.isRemote)
             {
                ChatComponentText text = new ChatComponentText("A Blood Mage would be able to build that.");
+               text.getChatStyle().setColor(EnumChatFormatting.GRAY).setItalic(true);
+               player.addChatComponentMessage(text);
+            }
+            result = null;
+         }
+         else if(className.startsWith("com.emoniph.witchery.") && (!hasWitch))
+         {
+            if(!player.worldObj.isRemote)
+            {
+               ChatComponentText text = new ChatComponentText("A Witch would be able to build that.");
+               text.getChatStyle().setColor(EnumChatFormatting.GRAY).setItalic(true);
+               player.addChatComponentMessage(text);
+            }
+            result = null;
+         }
+         else if(className.startsWith("tconstruct.") && (!hasTinker))
+         {
+            if(!player.worldObj.isRemote)
+            {
+               ChatComponentText text = new ChatComponentText("A Tinker would be able to build that.");
                text.getChatStyle().setColor(EnumChatFormatting.GRAY).setItalic(true);
                player.addChatComponentMessage(text);
             }

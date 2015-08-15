@@ -25,6 +25,7 @@ public class MagicWarsCommand extends CommandBase
       this.classNames = new ArrayList<String>();
       this.classNames.add("Thaumcraft");
       this.classNames.add("BloodMagic");
+      this.classNames.add("Witchery");
       this.classNames.add("TConstruct");
 
       this.flags = new ArrayList<String>();
@@ -83,7 +84,7 @@ public class MagicWarsCommand extends CommandBase
       NBTTagCompound playerData = player.getEntityData();
       NBTBase baseData = playerData.getTag("MagicWars");
       NBTTagCompound mwData = null;
-      if(baseData instanceof NBTTagCompound)
+      if((baseData != null) && (baseData instanceof NBTTagCompound))
       {
          mwData = (NBTTagCompound) baseData;
       }
