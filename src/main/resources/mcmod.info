@@ -1,0 +1,16 @@
+[
+{
+  "modid": "magicwars",
+  "name": "MagicWars",
+  "description": "Mod vs. Mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["VegasGoat"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["Thaumcraft", "AWWayofTime"]
+}
+]
