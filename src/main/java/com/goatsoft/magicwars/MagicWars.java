@@ -18,7 +18,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-
+import tconstruct.tools.TinkerTools;
 import java.util.Iterator;
 
 @Mod(modid = MagicWars.MODID, version = MagicWars.VERSION,
@@ -39,8 +39,8 @@ public class MagicWars
       // remove recipes we'll be replacing
       removeRecipes();
 
-      // add our own replacement for the crafting table
-      addCraftingTable();
+      // add our own replacements for the various crafting tables
+      addCraftingTables();
 
       // register gui handler
       NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
@@ -82,22 +82,52 @@ public class MagicWars
       }
    }
 
-   private void addCraftingTable()
+   private void addCraftingTables()
    {
-      // register the new table
+      // register replacement crafting table
       FilteredBlockWorkbench mwBench = new FilteredBlockWorkbench();
       mwBench.setHardness(2.5F);
       mwBench.setStepSound(Block.soundTypeWood);
-      mwBench.setBlockName("mw_crafting_table");
+      mwBench.setBlockName("workbench");
       mwBench.setBlockTextureName("crafting_table");
       GameRegistry.registerBlock(mwBench, "mw_crafting_table");
 
-      // add recipe to create the table using any type of wood
+      // add recipe for replacement crafting table
       GameRegistry.addRecipe(new ShapedOreRecipe(mwBench, "##", "##", '#', "plankWood"));
 
-      // add recipes that use the crafting table
-      // TODO: (TConstruct) crafting station
-      // TODO: (TConstruct) crafting station slab
+      // register replacement crafting tile entity
+      GameRegistry.registerTileEntity(FilteredCraftingStationLogic.class, "mw_crafting_logic");
+
+      // register replacement crafting station
+      FilteredCraftingStation mwStation = new FilteredCraftingStation();
+      mwStation.setBlockName("CraftingStation");
+      GameRegistry.registerBlock(mwStation, "mw_crafting_station");
+
+      // add recipe for replacement crafting station
+      GameRegistry.addShapelessRecipe(new ItemStack(mwStation), new ItemStack(mwBench));
+
+      // register replacement crafting slab
+      FilteredCraftingSlab mwCraftSlab = new FilteredCraftingSlab();
+      mwCraftSlab.setBlockName("CraftingStation");
+      GameRegistry.registerBlock(mwCraftSlab, "mw_crafting_slab");
+
+      // add recipes for replacement crafting slab
+      GameRegistry.addRecipe(new ItemStack(mwCraftSlab), "#", '#', new ItemStack(mwStation));
+      GameRegistry.addRecipe(new ItemStack(mwCraftSlab, 6), "###", '#', new ItemStack(mwBench));
+
+      // other recipes that use crafting tables
+      GameRegistry.addRecipe(
+         new ItemStack(TinkerTools.toolStationWood), "A", "B",
+         'A', new ItemStack(TinkerTools.blankPattern),
+         'B', new ItemStack(mwBench));
+      GameRegistry.addRecipe(
+         new ItemStack(TinkerTools.toolStationWood), "A", "B",
+         'A', new ItemStack(TinkerTools.blankPattern),
+         'B', new ItemStack(mwStation));
+      GameRegistry.addRecipe(
+         new ItemStack(TinkerTools.toolStationWood), "A", "B",
+         'A', new ItemStack(TinkerTools.blankPattern),
+         'B', new ItemStack(mwCraftSlab));
       // TODO: (BloodMagic) sigil of compression
    }
 }

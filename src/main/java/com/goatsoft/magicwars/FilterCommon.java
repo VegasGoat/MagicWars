@@ -104,12 +104,32 @@ public class FilterCommon
             result = null;
          }
 
+         boolean tinkerOnly = false;
+
          // must have tinkers flag for tinker's construct results
          if((!matched) && className.startsWith("tconstruct.") && (!hasTinker))
          {
+            matched = true;
+            tinkerOnly = true;
+         }
+
+         // replacement crafting stations are tinker's only as well
+         if((!matched) && className.equals(FilteredCraftingStation.class.getName()) && (!hasTinker))
+         {
+            matched = true;
+            tinkerOnly = true;
+         }
+         if((!matched) && className.equals(FilteredCraftingSlab.class.getName()) && (!hasTinker))
+         {
+            matched = true;
+            tinkerOnly = true;
+         }
+
+         if(tinkerOnly)
+         {
             if(!player.worldObj.isRemote)
             {
-               ChatComponentText text = new ChatComponentText("A Tinker would be able to build that.");
+               ChatComponentText text = new ChatComponentText("A Tinkerer would be able to build that.");
                text.getChatStyle().setColor(EnumChatFormatting.GRAY).setItalic(true);
                player.addChatComponentMessage(text);
             }

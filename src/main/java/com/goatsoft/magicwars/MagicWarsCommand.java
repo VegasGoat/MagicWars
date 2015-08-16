@@ -42,7 +42,7 @@ public class MagicWarsCommand extends CommandBase
    @Override
    public String getCommandUsage(ICommandSender sender)
    {
-      return "magicwars <player> [Thaumcraft|BloodMagic|TConstruct] [true|false]";
+      return "/magicwars <player> [Thaumcraft|BloodMagic|TConstruct] [true|false]";
    }
 
    @Override
@@ -139,19 +139,33 @@ public class MagicWarsCommand extends CommandBase
       }
       else if(args.length == 2)
       {
-         return this.classNames;
+         return getMatchingList(this.classNames, args[1]);
       }
       else if(args.length == 3)
       {
-         return this.flags;
+         return getMatchingList(this.flags, args[2]);
       }
       return null;
+   }
+
+   private List<String> getMatchingList(List<String> ll, String arg)
+   {
+      List<String> retList = new ArrayList<String>();
+      for(String check : ll)
+      {
+         if(check.startsWith(arg)) retList.add(check);
+      }
+      if(retList.isEmpty())
+      {
+         return ll;
+      }
+      return retList;
    }
 
    @Override
    public boolean isUsernameIndex(String[] args, int index)
    {
-      if(index == 1) return true;
+      if(index == 0) return true;
       return false;
    }
 }
